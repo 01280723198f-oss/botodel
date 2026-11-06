@@ -1,0 +1,4 @@
+cache.json
+.key
+*.log
+__pycache__/

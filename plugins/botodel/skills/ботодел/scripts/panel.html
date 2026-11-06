@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ботодел</title>
+<style>
+:root{
+  --bg:#f4efe6; --panel:#fff; --panel-2:#faf7f1; --ink:#1f1b16; --muted:#665d52; --line:#ebe4d7;
+  --side:#17161a; --side-2:#232127; --side-ink:#e9e6e1; --side-muted:#8d8a92;
+  --acc:#f2b21b; --acc-2:#9a6a00; --acc-ink:#2a1e00; --acc-soft:#fff3cf;
+  --ok:#16733a; --ok-soft:#e6f6ec; --warn:#8a5c08; --warn-soft:#fbf1dc; --bad:#a8331f; --bad-soft:#fbe9e5;
+  --tg:#1b67a6; --tg-soft:#e5f2fc; --r:16px;
+}
+*{box-sizing:border-box}
+body{margin:0;font:14px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter",system-ui,sans-serif;color:var(--ink);background:var(--bg);display:flex;min-height:100vh}
+a{color:inherit}
+/* боковое меню */
+aside{width:222px;flex:none;background:var(--side);color:var(--side-ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.brand{display:flex;gap:12px;align-items:center;padding:20px 18px 18px}
+.logo{width:36px;height:36px;border-radius:10px;background:var(--acc);display:grid;place-items:center;font-size:19px}
+.brand b{display:block;font-size:15px;letter-spacing:.02em}
+.brand b span{color:var(--acc)}
+.brand small{display:block;font-size:9.5px;color:var(--side-muted);text-transform:uppercase;letter-spacing:.08em;line-height:1.3}
+.grp{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--side-muted);padding:16px 22px 6px}
+nav a{display:flex;align-items:center;gap:12px;margin:2px 10px;padding:9px 12px;border-radius:10px;text-decoration:none;color:var(--side-ink);font-size:14px;cursor:pointer}
+nav a:hover{background:var(--side-2)}
+nav a.on{background:var(--acc);color:var(--acc-ink);font-weight:600}
+nav a .i{width:18px;text-align:center}
+nav a .c{margin-left:auto;font-size:11px;background:var(--side-2);color:var(--side-muted);border-radius:8px;padding:1px 7px}
+nav a.on .c{background:rgba(0,0,0,.12);color:var(--acc-ink)}
+.me{margin-top:auto;border-top:1px solid var(--side-2);padding:14px 16px;display:flex;gap:10px;align-items:center}
+.me .av{width:32px;height:32px;border-radius:50%;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-weight:700}
+.me small{display:block;color:var(--side-muted);font-size:11px}
+/* основная часть */
+main{flex:1;min-width:0}
+header{display:flex;align-items:center;gap:20px;padding:16px 26px;background:var(--panel-2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0;min-width:110px}
+.search{flex:0 1 320px;display:flex;align-items:center;gap:8px;background:#efeae1;border-radius:10px;padding:8px 12px}
+.search input{border:0;background:none;outline:none;font:inherit;width:100%}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.idle{background:#eee9e0;color:var(--muted)}
+.pill.err{background:var(--bad-soft);color:var(--bad)} .pill.off{background:#eee9e0;color:var(--muted)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.wrap{padding:22px 26px 40px;max-width:1240px}
+.card{background:var(--panel);border-radius:var(--r);border:1px solid var(--line);box-shadow:0 1px 2px rgba(40,30,10,.04)}
+.box{padding:18px 18px 20px;margin-bottom:22px}
+h2{font-size:15px;margin:0 0 14px}
+h2 small{font-weight:400;color:var(--muted);font-size:12px}
+.grid{display:grid;gap:16px}
+.g3{grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.g4{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+@media (min-width:1000px){.g4{grid-template-columns:repeat(3,1fr)}}
+.bot{padding:16px}
+.bot-top{display:flex;gap:12px;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.ava{width:42px;height:42px;border-radius:12px;background:var(--acc);display:grid;place-items:center;font-size:20px;flex:none}
+.ava.soft{background:var(--acc-soft);width:34px;height:34px;font-size:17px;border-radius:10px}
+.bot-top b{font-size:15px;display:block}
+.bot-top small,.mut{color:var(--muted);font-size:12px}
+.bot-top .pill{margin-left:auto}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:12px}
+.nums b{font-size:24px;display:block;letter-spacing:-.02em}
+.nums b.s{font-size:14px;color:#5b534a;padding-top:6px}
+.add{border:2px dashed var(--line);display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);border-radius:var(--r)}
+.add .plus{width:40px;height:40px;border-radius:50%;background:var(--acc-soft);color:var(--acc-2);display:grid;place-items:center;font-size:24px;margin:0 auto 10px}
+.add b{color:var(--ink);display:block}
+.sc{padding:16px;display:flex;flex-direction:column;gap:10px}
+.sc-top{display:flex;gap:12px;align-items:flex-start}
+.sc-top b{font-size:14px;line-height:1.35}
+.tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:600;border-radius:6px;padding:2px 8px;background:var(--tg-soft);color:var(--tg)}
+.tag.k{background:#f1ece3;color:#6b6257;font-weight:500}
+.sc-bot{border-top:1px solid var(--line);padding-top:10px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);margin-top:auto}
+.sc-bot .pill{margin-right:auto}
+.sc-bot b{color:var(--ink)}
+.kpi{padding:16px}
+.kpi b{font-size:30px;letter-spacing:-.03em;display:block}
+.kpi small{color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.n{text-align:right;font-variant-numeric:tabular-nums} th.n{text-align:right}
+.copy{border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:3px 9px;font:inherit;font-size:12px;cursor:pointer}
+.copy:hover{border-color:var(--acc)}
+.empty{color:var(--muted);padding:26px;text-align:center}
+.hint{background:var(--acc-soft);border-radius:12px;padding:12px 14px;font-size:13px;margin-bottom:18px;color:#5a4300}
+/* график */
+.chart{position:relative;height:200px;margin-top:6px}
+.chart svg{width:100%;height:100%;overflow:visible}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12px;border-radius:8px;padding:6px 9px;white-space:nowrap;transform:translate(-50%,-110%);display:none}
+.phone{margin:auto 10px 0;padding:10px 12px;border-radius:10px;background:var(--side-2);color:var(--side-ink);font-size:13px;cursor:pointer;display:block}
+.phone small{display:block;color:var(--side-muted);font-size:11px}
+.phone+.me{margin-top:10px}
+.ch{background:var(--ink);color:#fff;border:0}
+.ch .bot-top{border-color:#3a3730}.ch .mut,.ch small{color:#c9c2b6}
+.form{display:grid;gap:12px;padding:18px}
+.form textarea{width:100%;min-height:150px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;resize:vertical;background:var(--panel-2)}
+.form input,.form select{border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;background:var(--panel-2)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer;background:#ece6da;color:var(--ink)}
+.btn.main{background:var(--acc);color:var(--acc-ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.job{font-size:12.5px;padding:8px 0;border-bottom:1px solid var(--line)}
+.job pre{white-space:pre-wrap;margin:4px 0 0;color:var(--muted);font:12px ui-monospace,Menlo,monospace}
+@media (max-width:820px){aside{position:fixed;bottom:0;top:auto;width:100%;height:auto;flex-direction:row;z-index:9;overflow-x:auto}aside .brand,aside .grp,aside .me,aside .phone{display:none}aside nav{display:flex}nav a{white-space:nowrap}main{padding-bottom:70px}header{flex-wrap:wrap}}
+@media (max-width:820px){.wrap{padding:16px}}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand"><div class="logo">🤖</div><div><b>БОТО<span>ДЕЛ</span></b><small>боты · подписчики<br>источники</small></div></div>
+  <div class="grp">Обзор</div>
+  <nav>
+    <a data-p="dash"><span class="i">📊</span>Дашборд</a>
+    <a data-p="people"><span class="i">👥</span>Подписчики<span class="c" id="c-people"></span></a>
+    <a data-p="bots"><span class="i">🤖</span>Боты<span class="c" id="c-bots"></span></a>
+  </nav>
+  <div class="grp">Маркетинг</div>
+  <nav>
+    <a data-p="growth"><span class="i">📈</span>Источники<span class="c" id="c-links"></span></a>
+    <a data-p="mail"><span class="i">📣</span>Рассылки</a>
+  </nav>
+  <a class="phone" id="phone" style="display:none">📱 Открыть с телефона<small>скопировать ссылку · тот же Wi-Fi</small></a>
+  <div class="me"><div class="av">__OWNER__</div><div>__OWNER__<small id="me-st">этот Мак</small></div></div>
+</aside>
+<main>
+  <header>
+    <h1 id="title">Боты</h1>
+    <label class="search">🔍<input id="q" placeholder="Поиск: бот, ник, источник"></label>
+    <span class="pill ok" id="clock">—</span>
+  </header>
+  <div class="wrap" id="view"></div>
+</main>
+<script>
+const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const KEY='__KEY__', PHONE='__PHONE__', api=p=>p+(p.includes('?')?'&':'?')+'k='+encodeURIComponent(KEY);
+let D=null, page=(location.hash||'#bots').slice(1), Q='';
+const TITLES={dash:'Дашборд',people:'Подписчики',bots:'Боты',growth:'Источники',mail:'Рассылки'};
+const ST={online:['ok','онлайн'],idle:['idle','ждёт запуска'],error:['err','ошибка'],off:['off','выключен']};
+const pill=s=>`<span class="pill ${ST[s][0]}">${ST[s][1]}</span>`;
+const fmtN=n=>Number(n||0).toLocaleString('ru-RU');
+function ago(t){ if(!t) return '—'; const s=(new Date(D.now)-new Date(t))/1000;
+  if(s<90) return 'только что'; if(s<3600) return Math.round(s/60)+' мин'; if(s<86400) return Math.round(s/3600)+' ч';
+  const d=Math.round(s/86400); return d+' дн'; }
+const day=t=>t?new Date(t).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):'—';
+const match=(...xs)=>!Q||xs.join(' ').toLowerCase().includes(Q);
+const botTitle=id=>(D.bots.find(b=>b.id===id)||{}).title||id;
+const botUser=id=>(D.bots.find(b=>b.id===id)||{}).username;
+
+function vBots(){
+  const bots=D.bots.filter(b=>match(b.title,b.username));
+  const sc=D.scenarios.filter(s=>match(s.title,s.key,botTitle(s.bot),botUser(s.bot)));
+  const sv=D.service.filter(s=>match(s.title,s.username,s.what));
+  return `
+  <div class="card box"><h2>Канал и боты для подписчиков</h2><div class="grid g3">
+   ${D.channel&&match(D.channel.title,D.channel.username,'канал')?`<div class="card bot ch"><div class="bot-top"><div class="ava">📣</div><div><b>${esc(D.channel.title)}</b>
+     <a class="mut" href="https://t.me/${esc(D.channel.username)}" target="_blank">@${esc(D.channel.username)}</a></div>${D.channel.stale?'<span class="pill warn">цифра старая</span>':'<span class="pill ok">канал</span>'}</div>
+     <div class="nums"><div><b>${fmtN(D.channel.members)}</b><small>подписчиков</small></div>
+     <div><b class="s" style="color:#fff">+${D.channel.join7} / −${D.channel.leave7}</b><small>за неделю по ссылкам</small></div></div></div>`:''}
+   ${bots.map(b=>`<div class="card bot"><div class="bot-top"><div class="ava">🤖</div><div><b>${esc(b.title)}</b>
+     ${b.username?`<a class="mut" href="https://t.me/${b.username}" target="_blank">@${b.username}</a>`:''}</div>${pill(b.status)}</div>
+     <div class="nums"><div><b>${fmtN(b.users)}</b><small class="mut">подписчиков${b.new7?` · +${b.new7} за неделю`:''}</small></div>
+     <div><b class="s">${ago(b.last)}</b><small class="mut">посл. активность</small></div></div></div>`).join('')}
+   <div class="add"><div><div class="plus">+</div><b>Подключить бота</b><small>токен от @BotFather → скилл «ботодел»</small></div></div>
+  </div></div>
+  <h2>Сценарии <small>· ${sc.length} шт.</small></h2>
+  <div class="grid g3" style="margin-bottom:26px">
+   ${sc.map(s=>`<div class="card sc"><div class="sc-top"><div class="ava soft">🤖</div><b>${esc(s.title)}</b></div>
+     <div class="tags"><span class="tag">Telegram</span><span class="mut">@${esc(botUser(s.bot)||s.bot)}</span><span class="tag k">${esc(s.key)}</span></div>
+     <div class="sc-bot">${s.active?'<span class="pill ok">Активен</span>':'<span class="pill off">Выключен</span>'}
+       <span><b>${fmtN(s.starts)}</b> ${s.starts_label||'стартов'}</span>${s.done!=null?`<span><b>${fmtN(s.done)}</b> ${s.done_label}</span>`:''}
+       ${s.note?`<span style="color:var(--bad)">${esc(s.note)}</span>`:''}</div></div>`).join('')||'<div class="empty">Ничего не нашлось</div>'}
+  </div>
+  <h2>Рабочие боты и задачи <small>· людей не собирают</small></h2>
+  <div class="card"><table><tr><th>Бот</th><th>Что делает</th><th>Статус</th></tr>
+   ${sv.map(s=>`<tr><td><b>${esc(s.title)}</b>${s.username?` <span class="mut">@${s.username}</span>`:''}</td><td class="mut">${esc(s.what)}</td>
+     <td>${s.job&&s.status==='idle'?'<span class="pill idle">по расписанию</span>':pill(s.status)}</td></tr>`).join('')}
+  </table></div>`;
+}
+
+function vPeople(){
+  const ps=D.people.filter(p=>match(p.username,p.first_name,p.last_name,p.source_name,p.bot_title,p.user_id));
+  return `<div class="card"><table><tr><th>Человек</th><th>Бот</th><th>Источник</th><th>Пришёл</th><th>Был</th><th>Статус</th></tr>
+  ${ps.map(p=>`<tr><td><b>${esc([p.first_name,p.last_name].filter(Boolean).join(' ')||'—')}</b>
+     ${p.username?` <a class="mut" href="https://t.me/${esc(p.username)}" target="_blank">@${esc(p.username)}</a>`:''}${p.is_premium?' ⭐':''}</td>
+    <td>${esc(p.bot_title)}</td><td>${esc(p.source_name)}</td><td>${day(p.first_seen)}</td><td>${ago(p.last_seen)}</td>
+    <td>${p.blocked?'<span class="pill err">заблокировал</span>':'<span class="pill ok">на связи</span>'}</td></tr>`).join('')
+    ||'<tr><td colspan="6" class="empty">Ничего не нашлось</td></tr>'}</table></div>`;
+}
+
+function vGrowth(){
+  const ls=D.links.filter(l=>match(l.name,l.source));
+  return `<div class="hint">Ссылка «в бота» ведёт человека за подарком с меткой источника. Ссылка «в канал» — пригласительная, по ней видно, кто подписался и отписался.</div>
+  <div class="card"><table><tr><th>Источник</th><th class="n">Старты</th><th class="n">Подарки</th><th class="n">Подписались</th><th class="n">Отписались</th><th>Ссылки</th></tr>
+  ${ls.map(l=>`<tr><td><b>${esc(l.name)}</b> <span class="mut">${esc(l.source)}</span></td>
+    <td class="n">${l.starts}</td><td class="n">${l.gifts}</td><td class="n">${l.join}</td><td class="n">${l.leave}</td>
+    <td>${l.start?`<button class="copy" data-c="${esc(l.start)}">в бота</button> `:''}${l.invite?`<button class="copy" data-c="${esc(l.invite)}">в канал</button>`:''}</td></tr>`).join('')}
+  </table></div>`;
+}
+
+const M={bot:'',text:'',bt:'',bu:'',tested:'',sending:false};
+const isUniq=id=>(D.bots.find(b=>b.id===id)||{}).kind==='uniq';
+const mkey=()=>JSON.stringify([M.bot,M.text.trim(),isUniq(M.bot)&&M.bt&&M.bu?[M.bt,M.bu]:null]);
+function vMail(){
+  if(!M.bot&&D.bots[0]) M.bot=D.bots[0].id;
+  const opts=D.bots.map(b=>`<option value="${b.id}" ${M.bot===b.id?'selected':''}>${esc(b.title)} · ${fmtN(b.users-b.blocked)} чел.</option>`).join('');
+  return `<div class="card" style="margin-bottom:22px"><div class="form">
+    <h2 style="margin:0">Новая рассылка</h2>
+    <div class="row"><select id="m-bot">${opts}</select><span class="mut">Разметка Telegram: &lt;b&gt;жирный&lt;/b&gt;, &lt;i&gt;курсив&lt;/i&gt;, &lt;a href="…"&gt;ссылка&lt;/a&gt;</span></div>
+    <textarea id="m-text" placeholder="Текст рассылки">${esc(M.text)}</textarea>
+    <div class="row" id="m-btnrow" style="${isUniq(M.bot)?'':'display:none'}"><input id="m-bt" placeholder="Кнопка: текст" value="${esc(M.bt)}"><input id="m-bu" placeholder="https://ссылка" value="${esc(M.bu)}" style="flex:1"></div>
+    <div class="row"><button class="btn" id="m-test">1. Тест себе</button><button class="btn main" id="m-all">2. Отправить всем</button>
+      <span class="mut" id="m-st"></span></div>
+  </div></div>
+  <div id="mail-hist">${mailHist()}</div>`;
+}
+function mailHist(){
+  const bs=D.broadcasts.filter(b=>match(b.bot_title)), js=(D.jobs||[]).slice().reverse();
+  return `${js.length?`<div class="card box"><h2>Отправки из панели</h2>${js.map(j=>`<div class="job"><b>${j.test?'Тест себе':'Всем'}</b> · ${esc(botTitle(j.bot))} · ${j.at.slice(11,16)} ·
+    ${j.status==='running'?'<span class="pill warn">идёт</span>':j.status==='done'?'<span class="pill ok">готово</span>':'<span class="pill err">ошибка</span>'}
+    <span class="mut">«${esc(j.preview)}»</span>${j.out?`<pre>${esc(j.out)}</pre>`:''}</div>`).join('')}</div>`:''}
+  <div class="card">${bs.length?`<table><tr><th>Когда</th><th>Бот</th><th class="n">Всего</th><th class="n">Дошло</th><th class="n">Заблокировали</th><th class="n">Ошибки</th></tr>
+  ${bs.map(b=>`<tr><td>${day(b.at)} ${String(b.at).slice(11,16)}</td><td>${esc(b.bot_title)}</td><td class="n">${b.total}</td><td class="n">${b.sent}</td><td class="n">${b.blocked}</td><td class="n">${b.failed}</td></tr>`).join('')}</table>`
+  :'<div class="empty">Рассылок по базе ещё не было.</div>'}</div>`;
+}
+function mailState(){
+  const ok=M.tested===mkey(), running=(D.jobs||[]).some(j=>j.status==='running');
+  const t=$('#m-test'), a=$('#m-all'), st=$('#m-st'); if(!t) return;
+  t.disabled=!M.text.trim()||running; a.disabled=!ok||running;
+  st.textContent=running?'отправляю…':ok?'тест ушёл — проверь в Telegram и жми «всем»':M.text.trim()?'сначала тест себе':'';
+}
+function mailBind(){
+  const sync=()=>{M.bot=$('#m-bot').value;M.text=$('#m-text').value;M.bt=$('#m-bt').value;M.bu=$('#m-bu').value;
+    $('#m-btnrow').style.display=isUniq(M.bot)?'':'none';mailState();};
+  ['#m-bot','#m-text','#m-bt','#m-bu'].forEach(s=>$(s).addEventListener('input',sync));
+  $('#m-test').onclick=()=>send(true); $('#m-all').onclick=()=>{
+    const b=D.bots.find(x=>x.id===M.bot), n=b?b.users-b.blocked:0;
+    if(confirm(`Отправить всей базе «${b?b.title:M.bot}» — ${n} чел.? Отменить будет нельзя.`)) send(false);};
+  mailState();
+}
+async function send(test){
+  const k=mkey(), body={bot:M.bot,text:M.text,test,button:JSON.parse(k)[2]};
+  const r=await (await fetch(api('/api/broadcast'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).json();
+  if(!r.ok){alert(r.error||'не получилось');return}
+  if(!test){M.text='';M.tested='';$('#m-text').value='';}
+  await poll(r.id,test?k:null);
+}
+async function poll(id,k){
+  for(let i=0;i<1800;i++){ await load(); const j=(D.jobs||[]).find(x=>x.id===id);
+    if(j&&j.status!=='running'){ if(k&&j.status==='done') M.tested=k; mailState(); return }
+    await new Promise(r=>setTimeout(r,2000)); }
+}
+
+function vDash(){
+  const k=D.kpi, tiles=[...(D.channel?[[D.channel.members,'подписчиков в канале']]:[]),[k.people,'человек в базе ботов'],[k.new7,'новых за 7 дней'],[k.starts30,'стартов за 30 дней'],
+    [k.join,'подписались в канал по ссылкам'],[k.leave,'отписались по ссылкам']];
+  return `<div class="grid g4" style="margin-bottom:22px">${tiles.map(([n,t])=>`<div class="card kpi"><b>${fmtN(n)}</b><small>${t}</small></div>`).join('')}</div>
+  <div class="card box"><h2>Старты ботов по дням <small>· последние 30 дней, все боты</small></h2><div class="chart" id="chart"><div class="tip" id="tip"></div></div></div>
+  <div class="card box"><h2>Состояние</h2><div class="tags">${[...D.bots,...D.service].map(b=>`<span style="display:inline-flex;gap:6px;align-items:center;margin-right:14px"><span class="tag k">${esc(b.title)}</span>${b.job&&b.status==='idle'?'<span class="pill idle">по расписанию</span>':pill(b.status)}</span>`).join('')}</div></div>`;
+}
+
+function drawChart(){
+  const el=$('#chart'); if(!el) return;
+  const W=el.clientWidth, H=200, pb=24, pt=10, pl=28, n=D.chart.length, bw=(W-pl)/n;
+  const vals=D.chart.map(c=>Object.values(c.by).reduce((a,b)=>a+b,0)), max=Math.max(4,...vals), step=Math.ceil(max/4);
+  const top=step*4, y=v=>pt+(H-pb-pt)*(1-v/top);
+  let s=`<svg viewBox="0 0 ${W} ${H}">`;
+  for(let i=0;i<=4;i++){const v=i*step; s+=`<line x1="${pl}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="#ece6da"/><text x="${pl-6}" y="${y(v)+4}" font-size="10" fill="#6b6257" text-anchor="end">${v}</text>`;}
+  D.chart.forEach((c,i)=>{const v=vals[i], x=pl+i*bw+1, w=Math.max(2,bw-2), h=H-pb-y(v);
+    if(v) s+=`<path d="M${x},${H-pb} V${y(v)+Math.min(4,h)} q0,-4 4,-4 H${x+w-4} q4,0 4,4 V${H-pb}Z" fill="#e3a10f"/>`;
+    s+=`<rect x="${pl+i*bw}" y="${pt}" width="${bw}" height="${H-pb-pt}" fill="transparent" data-i="${i}"/>`;
+    if(i%5===0) s+=`<text x="${x+w/2}" y="${H-6}" font-size="10" fill="#6b6257" text-anchor="middle">${day(c.d)}</text>`;});
+  s+=`<line x1="${pl}" x2="${W}" y1="${H-pb}" y2="${H-pb}" stroke="#d9d0c0"/></svg>`;
+  el.insertAdjacentHTML('beforeend',s);
+  const tip=$('#tip');
+  el.querySelector('svg').addEventListener('mousemove',e=>{const i=e.target.dataset.i; if(i==null){tip.style.display='none';return}
+    const c=D.chart[i]; tip.innerHTML=`<b>${day(c.d)}</b> · ${vals[i]} стартов<br>`+D.bots.map(b=>`${esc(b.title)} ${c.by[b.id]||0}`).join(' · ');
+    tip.style.display='block'; tip.style.left=(pl+i*bw+bw/2)+'px'; tip.style.top=y(vals[i])+'px';});
+  el.addEventListener('mouseleave',()=>tip.style.display='none');
+}
+
+function render(){
+  if(!D) return;
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.p===page));
+  $('#title').textContent=TITLES[page]||'Боты';
+  $('#view').innerHTML=({dash:vDash,people:vPeople,bots:vBots,growth:vGrowth,mail:vMail}[page]||vBots)();
+  if(page==='dash') drawChart();
+  if(page==='mail') mailBind();
+}
+async function load(){
+  try{ D=await (await fetch(api('/api/data'))).json();
+    $('#c-people').textContent=D.kpi.people; $('#c-bots').textContent=D.bots.length+D.service.length; $('#c-links').textContent=D.links.length;
+    $('#clock').className='pill ok'; $('#clock').textContent='этот Мак · '+D.now.slice(11,19);
+    if(page==='mail'&&$('#mail-hist')){$('#mail-hist').innerHTML=mailHist();mailState();} else render();
+  }catch(e){ $('#clock').className='pill err'; $('#clock').textContent='панель не отвечает'; }
+}
+if(PHONE&&!PHONE.startsWith('__')){const ph=$('#phone');ph.style.display='block';ph.onclick=()=>{navigator.clipboard.writeText(PHONE);ph.firstChild.textContent='📱 Ссылка скопирована ';setTimeout(()=>ph.firstChild.textContent='📱 Открыть с телефона',1500)}}
+document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>{page=a.dataset.p; location.hash=page; render();});
+$('#q').oninput=e=>{Q=e.target.value.trim().toLowerCase(); render();};
+document.addEventListener('click',e=>{const b=e.target.closest('.copy'); if(!b) return;
+  navigator.clipboard.writeText(b.dataset.c); const t=b.textContent; b.textContent='скопировано'; setTimeout(()=>b.textContent=t,1200);});
+addEventListener('resize',()=>page==='dash'&&render());
+load(); setInterval(load,30000);
+document.querySelector('.me .av').textContent=document.querySelector('.me .av').textContent.slice(0,1);
+</script>
+</body>
+</html>

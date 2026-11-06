@@ -1,0 +1,12 @@
+{
+  "name": "botodel",
+  "owner": {"name": "Евгений Толстобров"},
+  "description": "Ботодел — Telegram-боты и панель управления ими на Claude Code",
+  "plugins": [
+    {
+      "name": "botodel",
+      "source": "./plugins/botodel",
+      "description": "Claude собирает Telegram-ботов и локальную панель управления: подписчики, сценарии, источники, рассылки тест→всем, канал, телефон, ярлык в Доке"
+    }
+  ]
+}

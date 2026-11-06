@@ -1,0 +1,18 @@
+{
+  "owner": "Имя",
+  "port": 8795,
+  "channel": {"username": "my_channel", "via_bot": "gift"},
+  "sources": {"insta": "Instagram"},
+  "audience": [
+    {"id": "gift", "kind": "gift", "title": "Бот-подарок", "dir": "~/.bots/gift",
+     "env": "gift-bot.env", "token": "TG_GIFT_BOT_TOKEN", "launchd": "com.me.gift-bot"},
+    {"id": "helper", "kind": "basic", "title": "Бот-помощник", "dir": "~/.bots/helper",
+     "env": "helper-bot.env", "token": "HELPER_BOT_TOKEN", "launchd": "com.me.helper-bot"}
+  ],
+  "service": [
+    {"id": "remote", "title": "Пульт Claude", "env": "remote-bot.env", "token": "REMOTE_BOT_TOKEN",
+     "launchd": "com.me.remote-bot", "what": "команды с телефона → Claude на Маке"},
+    {"id": "report", "title": "Вечерняя сводка", "launchd": "com.me.gift-report",
+     "what": "отчёт в 21:00", "job": true}
+  ]
+}
