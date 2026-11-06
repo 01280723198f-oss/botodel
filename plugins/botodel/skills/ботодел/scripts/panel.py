@@ -64,17 +64,21 @@ def read_env(name):
 
 
 def launchd_status():
-    """{label: {"loaded": bool, "pid": int|None, "exit": int|None}}"""
+    """{label: {"loaded": bool, "pid": int|None, "exit": int|None}}.
+    `launchctl print gui/<uid>`, а не `launchctl list`: из-под launchd `list` видит не тот домен
+    и все боты казались выключенными."""
     st = {}
     try:
-        out = subprocess.run(["launchctl", "list"], capture_output=True, text=True, timeout=5).stdout
+        out = subprocess.run(["launchctl", "print", f"gui/{os.getuid()}"], capture_output=True,
+                             text=True, timeout=5).stdout
     except Exception:
         return st
-    for line in out.splitlines()[1:]:
-        parts = line.split("\t")
+    block = out.split("services = {", 1)[-1].split("}", 1)[0] if "services = {" in out else ""
+    for line in block.splitlines():
+        parts = line.split()
         if len(parts) == 3:
             pid, code, label = parts
-            st[label] = {"loaded": True, "pid": int(pid) if pid.isdigit() else None,
+            st[label] = {"loaded": True, "pid": int(pid) if pid.isdigit() and pid != "0" else None,
                          "exit": int(code) if code.lstrip("-").isdigit() else None}
     return st
 
